@@ -15,6 +15,15 @@ AI-assisted scam-risk analysis for suspicious SMS, WhatsApp messages, emails, jo
 - Graceful fallback when Gemini is unavailable
 - Server-side API key handling
 
+## Proof / evidence
+The repository includes project evidence cards documenting the working system and the actual development benchmark. These are deliberately separated from marketing claims so the results remain auditable.
+
+- [Live AI analysis evidence](proof/live-analysis.svg)
+- [Public Render deployment evidence](proof/render-deployment.svg)
+- [Evaluation results evidence](proof/evaluation-results.svg)
+
+The public application is available at https://scamshield-ai-dpm7.onrender.com.
+
 ## Architecture
 ```text
 Browser
@@ -40,10 +49,21 @@ The repository includes a 30-case labeled evaluation set covering:
 - phishing/suspicious links
 - benign and ambiguous messages
 
+A live evaluation was run against the deployed application. The first baseline produced:
+
+| Metric | Baseline result |
+|---|---:|
+| Cases completed | 29 / 30 |
+| Risk-level accuracy | 51.7% |
+| Category accuracy | 65.5% |
+| Exact level + category | 34.5% |
+
+One case returned HTTP 500 and was excluded from the completed-case denominator. These numbers are reported as observed; they are **not** a production accuracy claim.
+
 Run the evaluator against the live deployment:
 
 ```bash
-python evaluation/evaluate.py https://scamshield-ai-dpm7.onrender.com
+python -u evaluation/evaluate.py https://scamshield-ai-dpm7.onrender.com
 ```
 
 The evaluator reports:
@@ -52,8 +72,9 @@ The evaluator reports:
 - exact-match accuracy
 - a risk-level confusion matrix
 - per-case results
+- failure cases and per-category breakdowns
 
-**Do not claim an accuracy percentage until the evaluator has actually been run.** The dataset is a small engineering test set, not a statistically representative benchmark.
+The evaluation workflow is intentionally a baseline → intervention → re-evaluation loop rather than a cherry-picked accuracy claim.
 
 ## Run locally
 ```bash
